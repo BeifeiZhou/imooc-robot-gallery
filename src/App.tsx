@@ -1,61 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './assets/images/logo.svg';
 import styles from './App.module.css';
 import robots from './mockdata/robots.json'
 import Robot from './components/Robot'
 import ShoppingCart from './components/ShoppingCart'
 
+
+
 interface Props { }
 interface State {
   robotGallery: any[];
   count: number
 }
-class App extends React.Component<Props, State> {
+const App: React.FC = (props) => {
 
-  // 生命周期第一阶段： 初始化
-  constructor(props) {
-    super(props);
-    this.state = {
-      robotGallery: [],
-      count: 0
-    }
-  }
+  // count: 变量
+  // setCount: 函数
+  const [count, setCount] = useState<number>(0)
+  const [robotGallery, setRobotGallery] = useState<any>([])
 
-  // 在组建初始化的时候调用一次
-  componentDidMount() {
+  // componentDidUpdate: If there is no second parameter, then the useEffect will be executed recursively
+  // componentDidMount: If [] is empty, then useEffect is similar as componentDidMount which
+  // will be only executed once when the component is mounted
+  useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then(response => response.json())
-      .then(data => this.setState({ robotGallery: data }))
-  }
+      .then(data => setRobotGallery(data))
+  }, [])
 
-  // 组建更新后调用
-  componentDidUpdate() { }
+  // The title of the page will change whenever count is changed
+  useEffect(() => {
+    document.title = `点击${count}次`
+  }, [count])
 
-  // 组建销毁后调用
-  componentWillUnmount() { }
-
-  render() {
-    return (
-      <div className={styles.app}>
-        <div className={styles.appHeader}>
-          <img src={logo} className={styles.appLogo} alt="logo" />
-          <h1>Robot online shopping</h1>
-        </div>
-        <button
-          onClick={() => {
-            this.setState({ count: this.state.count + 1 }, () => {
-              console.log("count ", this.state.count)
-            })
-          }}
-        >Click</button>
-        <span>count: {this.state.count}</span>
-        <ShoppingCart />
-        <div className={styles.robotList}>
-          {this.state.robotGallery.map(r => <Robot id={r.id} name={r.name} email={r.email} />)}
-        </div>
+  return (
+    <div className={styles.app}>
+      <div className={styles.appHeader}>
+        <img src={logo} className={styles.appLogo} alt="logo" />
+        <h1>Robot online shopping</h1>
       </div>
-    );
-  }
+      <button
+        onClick={() => { setCount(count + 1) }}
+      >Click</button>
+      <span>count: {count}</span>
+      <ShoppingCart />
+      <div className={styles.robotList}>
+        {robotGallery.map(r => <Robot id={r.id} name={r.name} email={r.email} />)}
+      </div>
+    </div>
+  );
+
 }
 
 export default App;
