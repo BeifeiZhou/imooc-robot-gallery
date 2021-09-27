@@ -4,9 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const defaultContextVaule = {
+  username: "testUser"
+}
+export const appContext = React.createContext(defaultContextVaule)
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <appContext.Provider value={defaultContextVaule}>
+      <App />
+    </appContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
