@@ -3,17 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AppSateProvider } from './AppState'
 
-const defaultContextVaule = {
-  username: "testUser"
-}
-export const appContext = React.createContext(defaultContextVaule)
 
 ReactDOM.render(
   <React.StrictMode>
-    <appContext.Provider value={defaultContextVaule}>
+    <AppSateProvider>
       <App />
-    </appContext.Provider>
+    </AppSateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
